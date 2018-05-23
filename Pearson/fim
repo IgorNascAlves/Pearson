@@ -6,19 +6,18 @@
        data.addColumn('number', 'x');
        data.addColumn('number', 'y');
        data.addRows(vetor);
-      var options = {
-        chart: {
-          title: 'Coeficiente de correlação de Pearson',
-          //subtitle: 'pos bola'
-        },
-        width: 900,
-        height: 500,
-        axes: {
-          x: {
-            0: {side: 'bottom'}
-          }
-        }
-      };
+       var options = {
+         title: 'Coeficiente de correlação de Pearson',
+         legend:'left',
+         width: 900,
+         height: 500,
+         hAxis: {
+           title: textX
+         },
+         vAxis: {
+           title: textY
+         }
+       };
       var chart = new google.visualization.ScatterChart(document.getElementById('line_top_x'));
       chart.draw(data, options);
   //    var chart = new google.charts.Line(document.getElementById('line_top_x'));

@@ -31,7 +31,7 @@ void criaHTML(char* str){
     fclose (Stream);
     fclose (Stream2);
 }
-void entradaHTML(vector<double> vetorx,vector<double> vetory, double a, char b[]){
+void entradaHTML(vector<double> vetorx,vector<double> vetory, double a, char b[],vector<string> vs){
     int tamanho = 1000* vetorx.size();
     char str[tamanho];
     char temp[tamanho];
@@ -40,8 +40,24 @@ void entradaHTML(vector<double> vetorx,vector<double> vetory, double a, char b[]
         str[i] = '\0';
         temp[i] = '\0';
     }
-
-    sprintf(temp,"var a = %f; var b =\"%s\";var vetor = [",a,b);
+    //char* a = vs[0].c_str();
+    //char porra[100] =  vs[0];
+    //strcat(str,vs[0]);
+    i=0;
+    while(vs[0][i++] != '\n');
+    char mano1[i];
+    int j=0;
+    for(;j<i;j++)
+        mano1[j] = vs[0][j];
+    mano1[j] = '/n';
+    i=0;
+    while(vs[1][i++] != '\n');
+    char mano2[i];
+    j=0;
+    for(;j<i;j++)
+        mano2[j] = vs[1][j];
+    mano2[j] = '/n';
+    sprintf(temp,"var textX = \"%s\"; var textY = \"%s\";var a = %f; var b =\"%s\";var vetor = [",mano1,mano2,a,b);
     strcat(str,temp);
     for(unsigned int i=0;i<vetorx.size();i++){
         sprintf(temp, "             [%f , %f ], \n", vetorx[i],vetory[i]);
@@ -51,7 +67,7 @@ void entradaHTML(vector<double> vetorx,vector<double> vetory, double a, char b[]
     strcat(str,temp);
     criaHTML(str);
 }
-void lerArquivo(vector<double> &vx,vector<double> &vy,int x,int y){
+void lerArquivo(vector<double> &vx,vector<double> &vy,int x,int y, vector<string> &vs){
     ifstream f;
     f.open("PRODUCAO_LEITE(editado).csv", fstream::in);
     double s;
@@ -60,6 +76,7 @@ void lerArquivo(vector<double> &vx,vector<double> &vy,int x,int y){
     int i=0;
     for(int i=0;i<5;i++){
         f>>teste;
+        vs.push_back(teste);
         //cout<<teste<<endl;
     }
     while(f>>s){
@@ -86,6 +103,12 @@ void lerArquivo(vector<double> &vx,vector<double> &vy,int x,int y){
     for(unsigned i=y;i<v.size();i=i+5){
         vy.push_back(v[i]);
     }
+    string a,b;
+    a = vs[x];
+    b = vs[y];
+    vs.clear();
+    vs.push_back(a);
+    vs.push_back(b);
 }
 class Arquivo{
 public:
@@ -170,10 +193,11 @@ int main(){
 
         vector<double> vetorx/* = {17,18,452,20,21,22,23,24}*/;
         vector<double> vetory/* = {1,2,3,4,5,6,7,8}*/;
+        vector<string> vs;
 
-        lerArquivo(vetorx,vetory,x,y);
+        lerArquivo(vetorx,vetory,x,y,vs);
         Arquivo teste(vetorx,vetory);
-        entradaHTML(vetorx,vetory,teste.correl(),teste.salvaString(teste.correl()));
+        entradaHTML(vetorx,vetory,teste.correl(),teste.salvaString(teste.correl()),vs);
 
 //        cout<<"quer continuar ? (0/1)"<<endl;
 //        cin>>opc;
